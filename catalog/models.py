@@ -33,10 +33,11 @@ class Product(models.Model):
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
-        ordering = ["name", ]
+        ordering = ["name",]
 
     def __str__(self):
         return self.name
+
 
 class Blog(models.Model):
     title = models.CharField(max_length=100, verbose_name='Заголовок', help_text='Укажите заголовок')
@@ -52,8 +53,21 @@ class Blog(models.Model):
     class Meta:
         verbose_name = 'Публикация'
         verbose_name_plural = 'Публикации'
-        ordering = ['created_at', 'is_published', 'view_counter', ]
+        ordering = ['created_at', 'is_published', 'view_counter',]
 
     def __str__(self):
         return f'{self.title}'
 
+
+class Version(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
+    number = models.FloatField(verbose_name='Номер версии')
+    name = models.CharField(max_length=100, verbose_name='Название версии', **NULLABLE)
+    working_ver = models.BooleanField(verbose_name='Признак версии', **NULLABLE)
+
+    def __str__(self):
+        return f'Версия {self.product} == {self.number}'
+
+    class Meta:
+        verbose_name = 'Версия'
+        verbose_name_plural = 'Версии'

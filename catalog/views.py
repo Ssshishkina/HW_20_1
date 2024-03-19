@@ -1,17 +1,91 @@
+from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-from catalog.models import Product, Blog
+from catalog.forms import ProductForm, VersionForm
+from catalog.models import Product, Blog, Version
 
 
 class HomeView(ListView):
     model = Product
 
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        products = self.get_queryset()
+
+        for product in products:
+            product.versions = Version.objects.filter(product=product)
+            product.version = product.versions.filter(working_ver=True).first()
+
+        return context
+
 
 class ProductDetailView(DetailView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        versions = Version.objects.filter(product=product)
+        context['versions'] = versions
+        working_ver = versions.filter(working_ver=True).first()
+        context['working_ver'] = working_ver
+
+        return context
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:home')
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:home')
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        if self.request.method == 'POST':
+            context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
+        else:
+            context_data['formset'] = VersionFormset(instance=self.object)
+        return context_data
+
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form, formset=formset))
+
+
+def toggle_working_ver(request, pk):
+    '''Функция вывода только рабочих версий'''
+    version_item = get_object_or_404(Product, pk=pk)
+    if version_item.working_ver:
+        version_item.working_ver = False
+    else:
+        version_item.working_ver = True
+    version_item.save()
+
+    return redirect(reverse('catalog:home'))
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('catalog:home')
 
 
 def contacts(request):
@@ -63,7 +137,7 @@ class BlogUpdateView(UpdateView):
 
         return super().form_valid(form)
 
-    def get_success_url(self):
+    def get_success_url(self, args, *kwargs):
         return reverse_lazy('catalog:blog_detail', args=[self.kwargs.get('pk')])
 
 
