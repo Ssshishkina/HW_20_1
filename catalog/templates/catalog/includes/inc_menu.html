@@ -5,3 +5,19 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:blg' %}">Публикации</a>
     </nav>
 </div>
+<div class="col-sm-4 offset-md-1 py-4">
+    <ul class="list-unstyled">
+        <li><a href="{% url 'catalog:home' %}" class="text-white">Главная</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'users:logout' %}" class="text-white">Выйти</a></li>
+        {% else %}
+        <li><a href="{% url 'users:login' %}" class="text-white">Войти</a></li>
+        <li><a href="{% url 'users:registration' %}" class="text-white">Регистрация</a></li>
+        <li><a href="{% url 'users:reset' %}" class="text-white">Восстановить пароль</a></li>
+        {% endif %}
+        <li><a href="/admin/" class="text-white">Админка</a></li>
+        <li><a href="{% url 'catalog:home' %}" class="text-white">Товары</a></li>
+        <li><a href="{% url 'catalog:w' %}" class="text-white">Контакты</a></li>
+        <li><a href="{% url 'catalog:blg' %}" class="text-white">Публикации</a></li>
+    </ul>
+</div>

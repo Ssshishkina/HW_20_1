@@ -19,7 +19,7 @@ class Command(BaseCommand):
         with open("db_products.json", "r", encoding="utf-8") as file:
             return json.load(file)
 
-    def handle(self, args, *options):
+    def handle(self, *args, **options):
         # Удалите все продукты
         Product.objects.all().delete()
 

@@ -5,10 +5,12 @@ from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Blog, Version
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class HomeView(ListView):
     model = Product
+    template_name = 'product_list.html'
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
@@ -39,13 +41,19 @@ class ProductDetailView(DetailView):
         return context
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
 
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
@@ -83,7 +91,7 @@ def toggle_working_ver(request, pk):
     return redirect(reverse('catalog:home'))
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:home')
 
@@ -137,7 +145,7 @@ class BlogUpdateView(UpdateView):
 
         return super().form_valid(form)
 
-    def get_success_url(self, args, *kwargs):
+    def get_success_url(self, *args, **kwargs):
         return reverse_lazy('catalog:blog_detail', args=[self.kwargs.get('pk')])
 
 

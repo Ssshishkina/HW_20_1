@@ -19,6 +19,11 @@
                         <li>Версия: {{ working_ver.name }}</li>
                         <li>Номер: {{ working_ver.number | floatformat }}</li>
                         <li>Признак: {{ working_ver.working_ver }}</li>
+                        {% if object.owner %}
+                        <p class="card-text">Пользователь {{ object.owner }}</p>
+                        {% else %}
+                        <p class="card-text"> Пользователь не авторизован</p>
+                        {% endif %}
                     </ul>
                     <button type="button" class="btn btn-lg btn-block btn-outline-warning">Купить</button>
                 </div>

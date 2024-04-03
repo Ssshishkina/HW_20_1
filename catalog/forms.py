@@ -4,9 +4,9 @@ from catalog.models import Product, Version
 
 class StyleFormMixin:
     '''Класс стилизации формы'''
-    def init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         '''Функция стилизации формы'''
-        super().init(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if isinstance(field, forms.BooleanField):
                 field.widget.attrs['class'] = 'form-check-input'
@@ -38,11 +38,6 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         if cleaned_data.lower() in self.forbidden_words:
             raise forms.ValidationError('Ошибка, использовано недопустимое слово в описании!')
         return cleaned_data
-
-    #def __init__(self, *args, **kwargs):
-        # super().__init__(*args, **kwargs)
-        # for field_name, field in self.fields.items():
-        #     field.widget.attrs['class'] = 'form-control'
 
 
 class VersionForm(StyleFormMixin, forms.ModelForm):
