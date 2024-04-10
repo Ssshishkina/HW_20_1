@@ -30,36 +30,17 @@ class UserRegisterView(CreateView):
         link = f'http://{host}/users/confirm_register/{token}/'
         message = f'Вы зарегистрировались. Подтвердите почту {link})'
         send_mail('Подтверждение почты', message, settings.EMAIL_HOST_USER,
-                  ['ana.koze@yandex.ru'])
+                  [user.email])
         return super().form_valid(form)
 
 
 def confirm_email(request, token):
     user = get_object_or_404(User, token=token)
+    print(user)
     user.is_active = True
     user.save()
 
-    def get_success_url(self):
-        return reverse('users:login')
-
-    def form_valid(self, form):
-        token = secrets.token_hex(8)
-        user = form.save()
-        user.token = token
-        user.is_active = False
-        user.save()
-        host = self.request.get_host()
-        link = f'http://{host}/users/confirm_register/{token}/'
-        message = f'Вы зарегистрировались на сайте "Пятерочка". Подтвердите почту {link})'
-        send_mail('Верификация почты', message, settings.EMAIL_HOST_USER,
-                  ['ana.koze@yandex.ru'])
-        return super().form_valid(form)
-
-    def confirm_email(request, token):
-        user = get_object_or_404(User, token=token)
-        user.is_active = True
-        user.save()
-        return redirect(reverse('users:login'))
+    return redirect('users:login')
 
 
 class UserForgotPasswordView(PasswordResetView):

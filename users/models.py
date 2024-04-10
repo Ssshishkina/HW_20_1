@@ -12,9 +12,8 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name='email')
     token = models.CharField(max_length=50, verbose_name='Токен', **NULLABLE)
 
-
-USERNAME_FIELD = 'email'
-REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
 
 class Meta:
@@ -24,5 +23,4 @@ class Meta:
 
 def __str__(self):
     return self.email
-
 
