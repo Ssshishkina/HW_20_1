@@ -1,7 +1,5 @@
 import json
-
 from django.core.management import BaseCommand
-
 from catalog.models import Category, Product
 
 
@@ -53,4 +51,3 @@ class Command(BaseCommand):
 
         # Создаем объекты в базе с помощью метода bulk_create()
         Product.objects.bulk_create(product_for_create)
-

@@ -8,8 +8,6 @@ from users.models import User
 import secrets
 from django.conf import settings
 from django.core.mail import send_mail
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.hashers import make_password
 import random
 
 

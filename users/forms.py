@@ -1,9 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from users.models import User
 from django import forms
-from django.contrib.auth.views import PasswordResetView
-from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse
 
 
 class UserRegisterForm(UserCreationForm):

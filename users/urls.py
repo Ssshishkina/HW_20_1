@@ -18,4 +18,3 @@ urlpatterns = [
     path('reset/', UserForgotPasswordView.as_view(), name='reset'),
     path('new_password/', NewPasswordView.as_view(), name='new_password'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

@@ -29,7 +29,6 @@ class Product(models.Model):
     updated_at = models.DateField(verbose_name='Дата последнего изменения (записи в БД)', auto_now=True, **NULLABLE)
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Пользователь', **NULLABLE)
 
-    #manufactured_at = models.DateField(verbose_name='Дата производства продукта', auto_now=True, **NULLABLE)
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"

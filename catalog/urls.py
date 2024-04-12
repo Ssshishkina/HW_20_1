@@ -22,4 +22,3 @@ urlpatterns = [
     path('blog/<int:pk>/delete/', BlogDeleteView.as_view(), name='delete'),
     path('blog/<int:pk>/is_published/', toggle_published, name='toggle_published'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
