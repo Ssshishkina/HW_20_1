@@ -28,11 +28,17 @@ class Product(models.Model):
     created_at = models.DateField(verbose_name='Дата создания (записи в БД)', auto_now_add=True, **NULLABLE)
     updated_at = models.DateField(verbose_name='Дата последнего изменения (записи в БД)', auto_now=True, **NULLABLE)
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Пользователь', **NULLABLE)
+    is_published = models.BooleanField(default=False, verbose_name='Опубликован')
 
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["name",]
+        permissions = [
+            ('cancel_publication', 'Can cancel publication'),
+            ('change_description', 'Can change description'),
+            ('change_category', 'Can change category'),
+        ]
 
     def __str__(self):
         return self.name

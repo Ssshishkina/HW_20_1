@@ -16,10 +16,14 @@
                     </ul>
                     <li><a href="{% url 'catalog:product_detail' product.pk %}" type="button"
                            class="btn btn-lg btn-block btn-outline-secondary">Посмотреть</a></li>
+                    {% if product.owner == request.user %}
                     <li><a href="{% url 'catalog:product_update' product.pk %}" type="button"
                            class="btn btn-lg btn-block btn-outline-secondary">Редактировать</a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
                     <li><a href="{% url 'catalog:product_delete' product.pk %}" type="button"
                            class="btn btn-lg btn-block btn-outline-secondary">Удалить</a></li>
+                    {% endif %}
                 </div>
             </div>
         </div>
