@@ -6,25 +6,27 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Blog, Version
 from django.contrib.auth.mixins import LoginRequiredMixin
+from services import get_products_from_cache
 
 
 class HomeView(ListView):
     model = Product
-    template_name = 'product_list.html'
+    # template_name = 'product_list.html'
 
-    def get_queryset(self, *args, **kwargs):
-        queryset = super().get_queryset(*args, **kwargs)
-        return queryset
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        products = self.get_queryset()
+def get_queryset(self):
+    return get_products_from_cache()
 
-        for product in products:
-            product.versions = Version.objects.filter(product=product)
-            product.version = product.versions.filter(working_ver=True).first()
 
-        return context
+def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    products = self.get_queryset()
+
+    for product in products:
+        product.versions = Version.objects.filter(product=product)
+        product.version = product.versions.filter(working_ver=True).first()
+
+    return context
 
 
 class ProductDetailView(DetailView):
