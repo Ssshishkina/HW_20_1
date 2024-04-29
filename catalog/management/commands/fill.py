@@ -35,7 +35,7 @@ class Command(BaseCommand):
                          description=category["fields"]["description"])
             )
 
-        #Создаем объекты в базе с помощью метода bulk_create()
+        # Создаем объекты в базе с помощью метода bulk_create()
         Category.objects.bulk_create(category_for_create)
 
         # Обходим все значения продуктов из фиктсуры для получения информации об одном объекте

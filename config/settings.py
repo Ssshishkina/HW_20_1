@@ -139,7 +139,7 @@ EMAIL_USE_SSL = True
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'   #если уст-но False,значит мы раб-ем лок-но и кеш-ть ничего не н.
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'   # если уст-но False,значит мы раб-ем лок-но и кеш-ть ничего не н.
 
 if CACHE_ENABLED:
     CACHES = {

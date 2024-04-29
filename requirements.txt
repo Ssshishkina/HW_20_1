@@ -1,2 +1,7 @@
 Django==4.2.2
-python-dotenv==1.0.1
+ipython==8.22.2
+pillow==10.2.0
+psycopg2==2.9.9
+redis==5.0.3
+env==0.1.0
+python-dotenv==1.0.0

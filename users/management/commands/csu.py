@@ -15,6 +15,6 @@ class Command(BaseCommand):
         user.set_password('Qwerty123')
         user.save()
 
-#новый пользователь
-#email='user_new@sky.pro',
-#user.set_password('@9gkHe56x')
+# новый пользователь
+# email='user_new@sky.pro',
+# user.set_password('@9gkHe56x')
